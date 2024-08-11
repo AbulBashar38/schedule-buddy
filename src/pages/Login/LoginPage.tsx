@@ -3,9 +3,9 @@ import loginImage from "../../assets/images/loginImage.png";
 const LoginPage = () => {
     return (<div>
         <div className="hero min-h-screen bg-white">
-            <div className="hero-content bg-white flex-col lg:flex-row w-[70%] rounded-[1em] h-[35em] shadow-2xl">
+            <div className="hero-content bg-white flex-col lg:flex-row md:w-[70%] w-full rounded-[1em]  h-full md:h-auto lg:h-[35em] shadow-2xl my-10">
                 <div className="!w-full bg-[#EFF3FF] h-full flex items-center justify-center rounded-[1em]">
-                    <img src={loginImage} className=" w-[30em]" alt="loginImage" />
+                    <img src={loginImage} className=" w-[17em] md:w-[30em]" alt="loginImage" />
                 </div>
                 <div className="card w-full max-w-sm shrink-0   ">
                     <div className="card-body">
@@ -38,7 +38,7 @@ const LoginPage = () => {
                                             d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
                                             clipRule="evenodd" />
                                     </svg>
-                                    <input type="password" placeholder="Password" className="grow text-gray-500"  />
+                                    <input type="password" placeholder="Password" className="grow text-gray-500" />
                                 </label>
                             </div>
                             <div className="form-control">
