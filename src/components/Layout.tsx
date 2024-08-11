@@ -2,7 +2,6 @@ import { Outlet } from "react-router";
 import Sidebar from "./shared/Sidebar";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
-import clsx from "clsx";
 
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
@@ -26,14 +25,14 @@ const Layout = () => {
             <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={sidebarOpen} />
             <section className="drawer-content px-5">
                 <Navbar setSidebarOpen={setSidebarOpen} />
-                <div className="bg-[#EFF3FF] w-full h-[calc(100vh-67px)] rounded-lg">
+                <div className="bg-[#f6f7ff] w-full min-h-[calc(100vh-67px)] rounded-lg">
                     <Outlet />
                 </div>
             </section>
             <section className="drawer-side">
                 <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" onClick={() => setSidebarOpen(false)
                 }></label>
-                <Sidebar />
+                <Sidebar setSidebarOpen={setSidebarOpen} />
             </section>
         </main>
     );

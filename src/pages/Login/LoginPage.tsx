@@ -9,7 +9,8 @@ const LoginPage = () => {
                 </div>
                 <div className="card w-full max-w-sm shrink-0   ">
                     <div className="card-body">
-                        <h1 className="text-[30px] font-bold text-center capitalize mb-[1em]">Login</h1>
+                       
+                        <h1 className="text-[30px] font-bold text-center capitalize mb-[1em] text-primary">LOGIN</h1>
                         <form className="flex flex-col gap-[2em]" >
                             <div className="from-control">
                                 <label className="input input-bordered flex items-center gap-2 bg-[#EFF3FF] !outline-[#d0ddff]">

@@ -8,3 +8,15 @@ export interface INavItem {
 export interface INavbarProps {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
+export interface ISidebarProps {
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+}
+export interface IUserData {
+  id: number;
+  name: string;
+  email: string;
+  img: string;
+}
+export interface IUserCardContainerProps {
+  userData: IUserData;
+}

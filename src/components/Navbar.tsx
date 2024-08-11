@@ -4,7 +4,7 @@ import { INavbarProps } from "../utils/interface";
 
 const Navbar = ({ setSidebarOpen }: INavbarProps) => {
     return (
-        <nav className="navbar bg-base-100">
+        <nav className="navbar bg-base-100 sticky top-0 z-50">
             <section className="flex-1">
                 <label htmlFor="my-drawer" className="drawer-button btn btn-square btn-ghost hover:bg-[#EFF3FF] mr-2 lg:hidden" onClick={() => setSidebarOpen((prev) => !prev)}>
                     <svg
