@@ -5,6 +5,11 @@ import user2 from '../../assets/images/user2.png'
 import user4 from '../../assets/images/user4.png'
 import { IUserData } from '../../utils/interface'
 import UserCardContainer from '../../components/AllUsers/UserCardContainer'
+import { useEffect, useState } from 'react'
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
+import { db } from '../../Auth/firebaseConfig'
+import { getAuth } from 'firebase/auth'
+import { getDatabase, onValue, ref } from "firebase/database";
 const data: IUserData[] = [
     {
         id: 0,
@@ -58,6 +63,39 @@ const data: IUserData[] = [
 ]
 
 const AllUsers = () => {
+    const [imageUrl, setImageUrl] = useState('');
+    const auth = getAuth()
+    const uid = auth.currentUser?.uid
+    console.log(auth.currentUser);
+
+    console.log({ imageUrl });
+    useEffect(() => {
+        const getUserData = async () => {
+            const docRef = doc(db, "users", 'QBvhASu2KqFSEJUJCkGE'
+            );
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                setImageUrl(docSnap.data().profilePicture)
+            } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!");
+            }
+            // await getDocs(collection(db, "users"))
+            //     .then((querySnapshot) => {
+            //         const newData = querySnapshot.docs
+            //             .map((doc) => ({ ...doc.data(), id: doc.id }));
+            //         // setImageUrl(newData);                
+            //         console.log(newData);
+            //     })
+
+        }
+        getUserData()
+
+
+    }, [uid]);
+
     return (
         <main>
             <section className="flex justify-between items-center py-10 px-10">
@@ -76,6 +114,7 @@ const AllUsers = () => {
                     </svg>
                 </label>
             </section>
+            <img src={imageUrl} alt="imageUrl" />
             <section className='flex flex-row flex-wrap gap-5 items-center justify-center p-5'>
                 {
                     data?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />)

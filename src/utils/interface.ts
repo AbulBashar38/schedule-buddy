@@ -1,3 +1,4 @@
+import { UserCredential } from "firebase/auth";
 import { Dispatch, ElementType, ReactNode, SetStateAction } from "react";
 
 export interface INavItem {
@@ -12,7 +13,7 @@ export interface ISidebarProps {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
 export interface IUserData {
-  id: number;
+  id?: number;
   name: string;
   email: string;
   img: string;
@@ -27,8 +28,18 @@ export interface IModalProps {
   className?: string;
 }
 export interface IAuthFromInitialValue {
-  name: string;
+  name?: string;
   email: string;
   password: string;
-  image: File | null;
+  image?: File | null;
+}
+
+export interface IFirebaseAuthContextType {
+  user?: IUserData | null;
+  login?: (credentials: IAuthFromInitialValue) => Promise<UserCredential>;
+  signUp?: (U: IAuthFromInitialValue) => Promise<UserCredential>;
+  signOut?: () => void;
+  isLoading: boolean;
+  setIsLoading?: (T: boolean) => void;
+  authStatus: "authenticated" | "unauthenticated";
 }

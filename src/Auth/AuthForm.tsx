@@ -2,6 +2,8 @@ import { useFormik } from "formik";
 import { useLocation } from "react-router";
 import { IAuthFromInitialValue } from "../utils/interface";
 import * as Yup from 'yup';
+import { useContext } from "react";
+import { FirebaseAuthContext } from "./AuthProvider";
 
 const initialValues: IAuthFromInitialValue = {
     name: '',
@@ -21,13 +23,18 @@ const validationSchemaForLogin = Yup.object({
 })
 const AuthForm = () => {
     const location = useLocation();
-
+    const { signUp, login } = useContext(FirebaseAuthContext)
 
     const formik = useFormik<IAuthFromInitialValue>({
         initialValues,
         validationSchema: location?.pathname === '/sign-up' ? validationSchemaForSignup : validationSchemaForLogin,
-        onSubmit: (values) => {
-            console.log(values);
+        onSubmit: async (values) => {
+
+            const res = location?.pathname === '/sign-up' && signUp ? await signUp(values) : login ? await login(values) : null
+            console.log({ res });
+
+
+
 
         }
     })
@@ -118,7 +125,9 @@ const AuthForm = () => {
                     type="file"
                     className="file-input file-input-bordered w-full file-input-primary bg-[#EFF3FF] !outline-[#d0ddff]"
                     name="image"
-                    onChange={formik.handleChange}
+                    accept="image/*"
+                    multiple={false}
+                    onChange={(e) => formik.setFieldValue('image', e.target.files[0])}
                     onBlur={formik.handleBlur} />
                 {formik.touched.image && formik.errors.image ? (
                     <div className="text-red-500 text-[12px] mt-1">{formik.errors.image}</div>
