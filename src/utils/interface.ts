@@ -1,4 +1,4 @@
-import { Dispatch, ElementType, SetStateAction } from "react";
+import { Dispatch, ElementType, ReactNode, SetStateAction } from "react";
 
 export interface INavItem {
   name: string;
@@ -19,4 +19,16 @@ export interface IUserData {
 }
 export interface IUserCardContainerProps {
   userData: IUserData;
+}
+
+export interface IModalProps {
+  id: string;
+  children: ReactNode;
+  className?: string;
+}
+export interface IAuthFromInitialValue {
+  name: string;
+  email: string;
+  password: string;
+  image: File | null;
 }
