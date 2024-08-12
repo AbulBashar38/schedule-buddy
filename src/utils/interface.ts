@@ -13,7 +13,7 @@ export interface ISidebarProps {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
 export interface IUserData {
-  id?: string;
+  id: string;
   name: string;
   email: string;
   profilePicture: string;
@@ -53,5 +53,23 @@ export interface IUploadProfileImage {
 export interface IStoreData {
   collectionName: string;
   data: any;
+}
+export interface IStoreUser extends IStoreData {
   customId: string;
+}
+export interface IAppointmentModal {
+  title: string;
+  description: string;
+  date: string;
+}
+
+export enum appointmentStatus {
+  pending = "pending",
+  approved = "approved",
+  canceled = "canceled",
+}
+export interface IAppointments extends IAppointmentModal {
+  id: string;
+  status: appointmentStatus;
+  toUser: IUserData;
 }

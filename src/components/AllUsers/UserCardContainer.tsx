@@ -27,7 +27,7 @@ const UserCardContainer = ({ userData }: IUserCardContainerProps) => {
                 </div>
             </div>
             <Modal id={`appointment_modal_${userData.id}`}>
-                <AppointmentModal />
+                <AppointmentModal userId={userData.id} />
             </Modal>
         </div>
     );

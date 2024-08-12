@@ -23,7 +23,7 @@ const validationSchemaForLogin = Yup.object({
 })
 const AuthForm = () => {
     const location = useLocation();
-    const { signUp, login, isLoading } = useContext(AuthContext)
+    const { signUp, login, isLoading, authStatus } = useContext(AuthContext)
 
 
     const navigation = useNavigate()
@@ -34,8 +34,9 @@ const AuthForm = () => {
 
             try {
                 const res = location?.pathname === '/sign-up' && signUp ? await signUp(values) : login ? await login(values) : null
-                navigation('/')
+
                 formik.resetForm()
+
             } catch (error) {
                 console.log(error);
 

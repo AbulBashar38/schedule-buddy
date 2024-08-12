@@ -1,15 +1,21 @@
 import { doc, DocumentData, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../Auth/firebaseConfig";
-import { IStoreData } from "../utils/interface";
+import { IStoreUser } from "../utils/interface";
 
-
-export const storeUserData = async ({ data, collectionName,customId }: IStoreData) => {
-    const docRef = doc(db, collectionName, customId);
+export const storeUserData = async ({
+  data,
+  collectionName,
+  customId,
+}: IStoreUser) => {
+  const docRef = doc(db, collectionName, customId);
   return await setDoc(docRef, data);
 };
-export const getUserById = async (userId: string): Promise<DocumentData> => {
+export const getDataById = async (
+  id: string,
+  collectionName: string
+): Promise<DocumentData> => {
   try {
-    const docRef = doc(db, "users", userId);
+    const docRef = doc(db, collectionName, id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {

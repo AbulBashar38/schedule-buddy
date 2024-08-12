@@ -3,8 +3,9 @@ import { IAuthFromInitialValue, IAuthContext, IUserData } from "../utils/interfa
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential, AuthError, onAuthStateChanged, signOut } from "firebase/auth";
 import { app, } from "./firebaseConfig";
 import { uploadProfilePicture } from "../api/authApi";
-import { getUserById, storeUserData } from "../api/userApi";
+import { getDataById, storeUserData } from "../api/userApi";
 import toast from "react-hot-toast";
+import usePersistentState from "../hooks/usePersistentState";
 
 const defaultAuthContext: IAuthContext = {
     user: null,
@@ -25,7 +26,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const [user, setUser] = useState<IUserData | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [authStatus, setAuthStatus] = useState<'authenticated' | 'unauthenticated'>()
+    const [authStatus, setAuthStatus] = usePersistentState<'authenticated' | 'unauthenticated'>('authStatus', 'unauthenticated')
     console.log('authStatus', authStatus);
 
     const auth = getAuth()
@@ -60,10 +61,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                         storeUserData({ collectionName: 'users', data: { uid, email, name, profilePicture: imageUrl }, customId: uid }).then(() => {
                             setIsLoading(false)
                             resolve(userCredential)
-                            getUserById(uid).then((data) => {
+                            getDataById(uid, 'users').then((data) => {
                                 setAuthStatus('authenticated')
                                 toast.success('Register Successfully')
-                                setUser(data as IUserData)
+                                setUser({ ...data, id: data?.uid } as IUserData)
 
                             }).catch((error) => {
                                 setAuthStatus('unauthenticated')
@@ -107,9 +108,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                 if (user) {
                     const uid = user.uid;
 
-                    getUserById(uid).then((data) => {
+                    getDataById(uid, 'users').then((data) => {
                         setAuthStatus('authenticated')
-                        setUser(data as IUserData)
+                        setUser({ ...data, id: data?.uid } as IUserData)
 
                     }).catch((error) => {
                         setAuthStatus('unauthenticated')
