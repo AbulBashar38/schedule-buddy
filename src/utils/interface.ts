@@ -13,10 +13,10 @@ export interface ISidebarProps {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
 export interface IUserData {
-  id?: number;
+  id?: string;
   name: string;
   email: string;
-  img: string;
+  profilePicture: string;
 }
 export interface IUserCardContainerProps {
   userData: IUserData;
@@ -34,12 +34,24 @@ export interface IAuthFromInitialValue {
   image?: File | null;
 }
 
-export interface IFirebaseAuthContextType {
+export interface IAuthContext {
   user?: IUserData | null;
   login?: (credentials: IAuthFromInitialValue) => Promise<UserCredential>;
   signUp?: (U: IAuthFromInitialValue) => Promise<UserCredential>;
   signOut?: () => void;
   isLoading: boolean;
   setIsLoading?: (T: boolean) => void;
+  setUser?: (T: IUserData | null) => void;
+  setAuthStatus?: (T: "authenticated" | "unauthenticated") => void;
   authStatus: "authenticated" | "unauthenticated";
+}
+
+export interface IUploadProfileImage {
+  image?: File | null;
+  uid: string;
+}
+export interface IStoreData {
+  collectionName: string;
+  data: any;
+  customId: string;
 }

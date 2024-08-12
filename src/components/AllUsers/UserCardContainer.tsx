@@ -15,7 +15,7 @@ const UserCardContainer = ({ userData }: IUserCardContainerProps) => {
         <div className="card bg-base-100 w-60 shadow-xl">
             <figure className="pt-5">
                 <img
-                    src={userData.img}
+                    src={userData.profilePicture}
                     alt="Shoes"
                     className="rounded-full w-[6em]" />
             </figure>

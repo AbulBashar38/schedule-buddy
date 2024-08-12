@@ -1,8 +1,17 @@
 import { AiOutlineUser } from "react-icons/ai";
 import { BiLogOutCircle } from "react-icons/bi";
 import { INavbarProps } from "../utils/interface";
+import { useContext } from "react";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const Navbar = ({ setSidebarOpen }: INavbarProps) => {
+    const { signOut, user } = useContext(AuthContext)
+    const handleLogoutClick = () => {
+        if (signOut) {
+
+            signOut()
+        }
+    }
     return (
         <nav className="navbar bg-base-100 sticky top-0 z-50">
             <section className="flex-1">
@@ -27,7 +36,7 @@ const Navbar = ({ setSidebarOpen }: INavbarProps) => {
                         <div className="w-10 rounded-full">
                             <img
                                 alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                src={user?.profilePicture} />
                         </div>
                     </div>
                     <ul
@@ -39,9 +48,9 @@ const Navbar = ({ setSidebarOpen }: INavbarProps) => {
                                 Profile
                             </a>
                         </li>
-                        <li>
+                        <li >
 
-                            <a className=" hover:bg-primary hover:text-white"><BiLogOutCircle />Logout</a>
+                            <a onClick={handleLogoutClick} className=" hover:bg-primary hover:text-white"><BiLogOutCircle />Logout</a>
                         </li>
                     </ul>
                 </div>

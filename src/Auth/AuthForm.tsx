@@ -1,9 +1,9 @@
 import { useFormik } from "formik";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { IAuthFromInitialValue } from "../utils/interface";
 import * as Yup from 'yup';
 import { useContext } from "react";
-import { FirebaseAuthContext } from "./AuthProvider";
+import { AuthContext } from "./AuthProvider";
 
 const initialValues: IAuthFromInitialValue = {
     name: '',
@@ -23,15 +23,23 @@ const validationSchemaForLogin = Yup.object({
 })
 const AuthForm = () => {
     const location = useLocation();
-    const { signUp, login } = useContext(FirebaseAuthContext)
+    const { signUp, login, isLoading } = useContext(AuthContext)
 
+
+    const navigation = useNavigate()
     const formik = useFormik<IAuthFromInitialValue>({
         initialValues,
         validationSchema: location?.pathname === '/sign-up' ? validationSchemaForSignup : validationSchemaForLogin,
         onSubmit: async (values) => {
 
-            const res = location?.pathname === '/sign-up' && signUp ? await signUp(values) : login ? await login(values) : null
-            console.log({ res });
+            try {
+                const res = location?.pathname === '/sign-up' && signUp ? await signUp(values) : login ? await login(values) : null
+                navigation('/')
+                formik.resetForm()
+            } catch (error) {
+                console.log(error);
+
+            }
 
 
 
@@ -137,7 +145,7 @@ const AuthForm = () => {
                 <button
                     className="btn btn-primary text-white"
                     type="submit"
-                >{location.pathname === '/sign-up' ? 'Create account' : 'Login'}</button>
+                >{location.pathname === '/sign-up' ? 'Create account' : 'Login'}{isLoading ? <span className="loading loading-spinner loading-sm"></span> : ""}</button>
             </div>
         </form>
     );

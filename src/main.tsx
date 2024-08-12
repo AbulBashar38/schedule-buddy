@@ -4,11 +4,21 @@ import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router.tsx'
 import AuthProvider from './Auth/AuthProvider.tsx'
+import { Toaster } from 'react-hot-toast'
+import { Provider } from 'react-redux'
+import { store } from './stateManagement/store.ts'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+        <Toaster toastOptions={{
+          style: {
+            backgroundColor: '#fafbff'
+          }
+        }} />
+      </AuthProvider>
+    </Provider>
   </StrictMode>,
 )

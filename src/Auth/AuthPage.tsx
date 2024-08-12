@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImage from "../assets/images/loginImage.png";
 import AuthForm from "./AuthForm";
 import clsx from "clsx";

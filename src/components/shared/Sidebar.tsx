@@ -3,8 +3,17 @@ import { Link, NavLink } from "react-router-dom";
 import { navItems } from "../../utils/constant";
 import { INavItem, ISidebarProps } from "../../utils/interface";
 import { BiLogOutCircle } from "react-icons/bi";
+import { useContext } from "react";
+import { AuthContext } from "../../Auth/AuthProvider";
 
 const Sidebar = ({ setSidebarOpen }: ISidebarProps) => {
+    const { signOut } = useContext(AuthContext)
+    const handleLogoutClick = () => {
+        if (signOut) {
+
+            signOut()
+        }
+    }
     return (
 
         <ul className="menu bg-base-100 text-base-content min-h-full w-72 p-4 relative">
@@ -26,7 +35,7 @@ const Sidebar = ({ setSidebarOpen }: ISidebarProps) => {
                 </li>)}
             </section>
             <section className="absolute left-[50%] bottom-10 translate-x-[-50%] ">
-                <li><Link to='#' onClick={() => { }}
+                <li><Link to='#' onClick={handleLogoutClick}
                     className="h-[50px] text-[16px] flex hover:bg-primary hover:text-white active:!bg-[#2a3afa] "><BiLogOutCircle />Logout
                 </Link></li>
             </section>
