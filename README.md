@@ -5,7 +5,7 @@ This is a great appointment scheduler application built using React. Here's a br
 ### 1. Live Demo
 Demo: [https://schedule-buddy-app.web.app](https://schedule-buddy-app.web.app)
 
-### 2. Run it locally
+### Repo clone
 Clone the repository into your projects directory:
 ```
 git clone https://github.com/AbulBashar38/schedule-buddy.git
@@ -26,6 +26,23 @@ or
 ```
 yarn
 ```
+
+### 2. Run project with docker
+
+**Please open your `Docker Desktop` first.**
+Then open you project in your tarminal and run this command:
+```
+docker-compose up --build
+```
+after run the project successfully browse [http://localhost:3000/](http://localhost:3000/)
+
+To stop the project run this command:
+```
+docker-compose down
+```
+
+### 3. Run it locally
+
 Create a `.env` file in your project `root directory`:
 
 <img src="./src/assets/images/env.png" alt="env" width="200"/>
