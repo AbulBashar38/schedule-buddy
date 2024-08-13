@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import { IAuthFromInitialValue } from "../utils/interface";
 import * as Yup from 'yup';
 import { useContext } from "react";
@@ -23,10 +23,9 @@ const validationSchemaForLogin = Yup.object({
 })
 const AuthForm = () => {
     const location = useLocation();
-    const { signUp, login, isLoading, authStatus } = useContext(AuthContext)
+    const { signUp, login, isLoading } = useContext(AuthContext)
 
 
-    const navigation = useNavigate()
     const formik = useFormik<IAuthFromInitialValue>({
         initialValues,
         validationSchema: location?.pathname === '/sign-up' ? validationSchemaForSignup : validationSchemaForLogin,
@@ -34,6 +33,7 @@ const AuthForm = () => {
 
             try {
                 const res = location?.pathname === '/sign-up' && signUp ? await signUp(values) : login ? await login(values) : null
+                console.log(res);
 
                 formik.resetForm()
 
@@ -136,7 +136,11 @@ const AuthForm = () => {
                     name="image"
                     accept="image/*"
                     multiple={false}
-                    onChange={(e) => formik.setFieldValue('image', e.target.files[0])}
+                    onChange={(e) => {
+                        if (e.target.files) {
+                            formik.setFieldValue('image', e.target.files[0])
+                        }
+                    }}
                     onBlur={formik.handleBlur} />
                 {formik.touched.image && formik.errors.image ? (
                     <div className="text-red-500 text-[12px] mt-1">{formik.errors.image}</div>

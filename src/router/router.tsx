@@ -1,5 +1,5 @@
 import { createBrowserRouter, LoaderFunctionArgs, redirect } from "react-router-dom";
-import Layout from "../components/Layout";
+
 import AllUsers from "../pages/AllUsers/AllUsers";
 import AuthPage from "../Auth/AuthPage";
 import PrivateRoute from "../components/PrivateRoute";

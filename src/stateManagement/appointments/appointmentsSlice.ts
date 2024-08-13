@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../Auth/firebaseConfig";
 import {
-  appointmentStatus,
+  
   IAppointments,
   IUserData,
 } from "../../utils/interface";
@@ -132,7 +132,7 @@ const appointmentsSlice = createSlice({
       state,
       action: PayloadAction<{
         search: string;
-        status: appointmentStatus;
+        status: string;
         filter: string;
       }>
     ) => {

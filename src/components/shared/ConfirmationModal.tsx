@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import { ReactNode, Ref, useRef } from "react";
+import { ReactNode,  RefObject, useRef } from "react";
 interface IProps {
     message: string,
     icon: ReactNode,
     cancelBtnText: string,
     confirmBtnText: string,
-    handleConfirmClick: (ref: Ref<HTMLButtonElement | null>) => void,
-    handleCancelClick: (ref: Ref<HTMLButtonElement | null>) => void,
+    handleConfirmClick: (ref: RefObject<HTMLButtonElement | null>) => void,
+    handleCancelClick: (ref: RefObject<HTMLButtonElement | null>) => void,
     iconClass?: string,
     messageClass?: string,
     cancelBtnClass?: string,
