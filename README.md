@@ -14,7 +14,11 @@ Or
 ```
 git clone git@github.com:AbulBashar38/schedule-buddy.git
 ```
-Install Dependency
+Navigate to the project directory:
+```
+cd your-project-name
+```
+Install Dependency:
 ```
 npm i
 ```
@@ -22,11 +26,11 @@ or
 ```
 yarn
 ```
-Create a `.env` file in your project `root directory`.
+Create a `.env` file in your project `root directory`:
 
 <img src="./src/assets/images/env.png" alt="env" width="200"/>
 
-Paste this `credential` in your `.env` file
+Paste this `credential` in your `.env` file:
 
 ```.env
 VITE_FIREBASE_API_KEY=AIzaSyCXK9h_wnhNHvnaTZ3FREI4BDDOICPfr6g
@@ -38,7 +42,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=505046968992
 VITE_FIREBASE_APP_ID=1:505046968992:web:1582654123e27ee9dd37c5Ï
 
 ```
-Build your project to run in production mode
+Build your project to run in production mode:
 ```
 npm run build
 ```
@@ -56,3 +60,16 @@ yarn preview
 ```
 Now you can browse the project at [http://localhost:4173/](http://localhost:4173/)
 
+# Project Features
+
+### User Management:
+- User login and account creation.
+- After login, a user can see all users and search for users by their name or email.
+- A user can make an appointment by clicking the ``Make an appointment`` button.
+
+### Appointment Management:
+- All appointments that a user schedules with other users can be seen on the `My Appointment` page.
+- A user can `cancel` appointment if desired.
+- All the appointment that others user want to schedula with me can see at `Requested Appointment` page.
+- A user can `approve` or `cancel` appointments from this page.
+- A user can search for appointments by name and email, filter by appointment status, and view upcoming and past appointments.
