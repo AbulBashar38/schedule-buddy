@@ -26,6 +26,7 @@ export interface IModalProps {
   id: string;
   children: ReactNode;
   className?: string;
+  closeOutSideClick?: boolean;
 }
 export interface IAuthFromInitialValue {
   name?: string;

@@ -1,10 +1,20 @@
-import { useEffect } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useAppDispatch, useAppSelector } from "../../stateManagement/hooks";
-import { getAllAppointments } from "../../stateManagement/appointments/appointmentsSlice";
+import { getAllAppointments, updateAppointmentStatus } from "../../stateManagement/appointments/appointmentsSlice";
 import dayjs from "dayjs";
-
+import { RiDeleteBinLine } from "react-icons/ri";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import Modal from "../../components/shared/Modal";
+import ConfirmationModal from "../../components/shared/ConfirmationModal";
+import { FaCalendarCheck } from "react-icons/fa";
+import { appointmentStatus } from "../../utils/interface";
+import clsx from "clsx";
+import { MdCancel, MdFreeCancellation } from "react-icons/md";
+import { TbCalendarCancel } from "react-icons/tb";
+interface ISelectedData { id: string, status: appointmentStatus }
 const AppointmentList = () => {
+    const [selectedInfo, setSelectedInfo] = useState<ISelectedData>({ id: '', status: appointmentStatus.pending })
     const dispatch = useAppDispatch()
     const appointments = useAppSelector((state) => state.appointments)
     console.log(appointments);
@@ -12,6 +22,16 @@ const AppointmentList = () => {
     useEffect(() => {
         dispatch(getAllAppointments())
     }, [dispatch])
+    const handleConfirmationModalOpen = (data: ISelectedData) => {
+        setSelectedInfo(data)
+        const modal = document.getElementById('confirmation');
+        if (modal instanceof HTMLDialogElement) {
+            modal.showModal();
+        } else {
+            console.error('Modal not found or is not a dialog element');
+        }
+
+    }
     return (<main>
         <section className="flex justify-between items-center py-10 px-10">
             <h3 className="text-[16px] font-semibold text-primary">Appointment list</h3>
@@ -78,13 +98,24 @@ const AppointmentList = () => {
                                 {appointment.description.substring(0, 30)}
                             </td>
                             <td>
-                                <div className="badge capitalize bg-[#ffebdd] text-[#FD9A56] border-none">
+                                <div className={clsx("badge capitalize  border-none font-semibold",
+                                    appointment.status === appointmentStatus.pending && 'bg-[#ffe7d5] text-[#ff9752]',
+                                    appointment.status === appointmentStatus.approved && 'bg-[#d6ffd2] text-[#5cc351]',
+                                    appointment.status === appointmentStatus.canceled && 'bg-[#ffd8e8] text-[#c11f21]',
+                                )}>
                                     {appointment.status}
                                 </div>
 
                             </td>
                             <td>
-                                {appointment.status}
+                                <div className="flex gap-2">
+                                    {appointment.status === appointmentStatus.canceled ? <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.approved })} className="btn btn-sm bg-transparent hover:bg-green-50 hover:border-green-200">
+                                        <IoMdCheckboxOutline size={16} className="text-green-600" />
+                                    </button> : <></>}
+                                    <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.canceled })} className="btn btn-sm bg-transparent hover:bg-red-50 hover:border-red-200">
+                                        <RiDeleteBinLine size={16} className="text-red-500 " />
+                                    </button>
+                                </div>
                             </td>
                         </tr>)}
                     </tbody>
@@ -113,6 +144,39 @@ const AppointmentList = () => {
                 </div>
             </div>
         </section>
+        <Modal id="confirmation" closeOutSideClick className="w-[25em]">
+            <ConfirmationModal
+                message={
+                    selectedInfo.status === appointmentStatus.canceled ?
+                        'Are you sure want to cancel the Appointment?'
+                        : 'Do you want to Approved?'}
+                icon={
+                    selectedInfo.status === appointmentStatus.canceled ?
+                        <MdFreeCancellation className="text-error" size={40} />
+                        : <FaCalendarCheck className="text-primary" size={40} />
+                }
+                cancelBtnText={'Cancel'}
+
+                confirmBtnText={selectedInfo.status === appointmentStatus.canceled ? 'Confirm' : 'Approved'}
+
+                iconClass={selectedInfo.status === appointmentStatus.canceled ? "bg-red-50" : ""}
+                confirmBtnClass={selectedInfo.status === appointmentStatus.canceled ? "btn-error" : ""}
+
+                handleConfirmClick={(ref: Ref<HTMLButtonElement | null>) => {
+                    dispatch(updateAppointmentStatus({ id: selectedInfo.id, data: { status: selectedInfo.status } }))
+                    if (ref) {
+                        ref?.current?.click()
+                    }
+                }}
+
+                handleCancelClick={(ref: Ref<HTMLButtonElement | null>) => {
+                    setSelectedInfo({ id: '', status: appointmentStatus.pending })
+                    if (ref) {
+                        ref?.current?.click()
+                    }
+                }}
+            />
+        </Modal>
     </main>);
 }
 

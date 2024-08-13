@@ -1,8 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../Auth/firebaseConfig";
-import { IAppointments, IUserData } from "../../utils/interface";
-import { getDataById } from "../../api/userApi";
+import {
+  appointmentStatus,
+  IAppointments,
+  IUserData,
+} from "../../utils/interface";
 interface IInitialState {
   isLoading: boolean;
   isError: boolean;
@@ -11,7 +20,7 @@ interface IInitialState {
   filteredAppointments: IAppointments[];
 }
 export const getAllAppointments = createAsyncThunk(
-  "users/getAllAppointments",
+  "appointments/getAllAppointments",
   async (_, thunkAPI) => {
     try {
       const docRef = collection(db, "appointments");
@@ -32,7 +41,6 @@ export const getAllAppointments = createAsyncThunk(
             id: appointmentDoc.id,
             toUser: userDocSnap.data() as IUserData,
           };
-          console.log({ combinedData });
 
           appointmentsWithUserData.push(combinedData);
         } else {
@@ -42,6 +50,19 @@ export const getAllAppointments = createAsyncThunk(
       return appointmentsWithUserData;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const updateAppointmentStatus = createAsyncThunk(
+  "appointments/updateStatus",
+  async ({ id, data }: { id: string; data: any }, thunkAPI) => {
+    try {
+      const appointmentRef = doc(db, "appointments", id);
+      await updateDoc(appointmentRef, data);
+      thunkAPI.dispatch(getAllAppointments());
+    } catch (error) {
+      thunkAPI.rejectWithValue(error);
     }
   }
 );
