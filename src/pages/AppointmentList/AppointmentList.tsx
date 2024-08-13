@@ -1,7 +1,7 @@
-import { Ref, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Ref, useCallback, useContext, useEffect, useRef, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useAppDispatch, useAppSelector } from "../../stateManagement/hooks";
-import { getAllAppointments, updateAppointmentStatus } from "../../stateManagement/appointments/appointmentsSlice";
+import { filterData, getMyAppointments, getRequestedAppointments, updateAppointmentStatus } from "../../stateManagement/appointments/appointmentsSlice";
 import dayjs from "dayjs";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoMdCheckboxOutline } from "react-icons/io";
@@ -10,18 +10,41 @@ import ConfirmationModal from "../../components/shared/ConfirmationModal";
 import { FaCalendarCheck } from "react-icons/fa";
 import { appointmentStatus } from "../../utils/interface";
 import clsx from "clsx";
-import { MdCancel, MdFreeCancellation } from "react-icons/md";
-import { TbCalendarCancel } from "react-icons/tb";
+import { MdFreeCancellation } from "react-icons/md";
+import { AuthContext } from "../../Auth/AuthProvider";
+import { useLocation } from "react-router";
+import _ from 'lodash'
 interface ISelectedData { id: string, status: appointmentStatus }
 const AppointmentList = () => {
+    const [isFiltering, setIsFiltering] = useState<boolean>(false)
+    const [search, setSearch] = useState<string>('')
+    const [status, setStatus] = useState<appointmentStatus>(appointmentStatus.all)
+    const [filter, setFilter] = useState<string>('')
     const [selectedInfo, setSelectedInfo] = useState<ISelectedData>({ id: '', status: appointmentStatus.pending })
+
+    const { user } = useContext(AuthContext)
+
+    const location = useLocation()
     const dispatch = useAppDispatch()
     const appointments = useAppSelector((state) => state.appointments)
     console.log(appointments);
+    const debouncedSearch = useCallback(
+        _.debounce(async (searchValue: string) => {
+            setSearch(searchValue)
+        }, 500),
+        []
+    );
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        // console.log(e.target.value);
+
+        debouncedSearch(e.target.value)
+    }
 
     useEffect(() => {
-        dispatch(getAllAppointments())
-    }, [dispatch])
+        if (user) {
+            dispatch(location.pathname === '/my-appointments' ? getMyAppointments(user.id) : getRequestedAppointments(user.id))
+        }
+    }, [dispatch, user, location])
     const handleConfirmationModalOpen = (data: ISelectedData) => {
         setSelectedInfo(data)
         const modal = document.getElementById('confirmation');
@@ -37,7 +60,7 @@ const AppointmentList = () => {
     const itemsPerPage = 10
 
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = appointments?.allAppointments?.slice(itemOffset, endOffset);
+    const currentItems = isFiltering ? appointments?.filteredAppointments?.slice(itemOffset, endOffset) : appointments?.allAppointments?.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(appointments?.allAppointments?.length / itemsPerPage);
 
     // Invoke when user click to request another page.
@@ -47,19 +70,38 @@ const AppointmentList = () => {
         const newOffset = (event.selected * itemsPerPage) % appointments?.allAppointments.length;
         setItemOffset(newOffset);
     };
+
+    useEffect(() => {
+        if (search?.length || status !== 'all' || filter) {
+            setIsFiltering(true)
+            dispatch(filterData({ search, status, filter }))
+        } else {
+            setIsFiltering(false)
+        }
+    }, [search, status, filter, dispatch])
     return (<main>
         <section className="flex justify-between items-center py-10 px-10">
             <h3 className="text-[16px] font-semibold text-primary">Appointment list</h3>
             <div className="flex gap-2">
-                <select className="select select-primary w-full max-w-xs ">
-                    <option selected>Status</option>
-                    <option>Pending</option>
-                    <option>Approved</option>
+                <select onChange={(e) => {
+
+                    setStatus(e.target.value)
+                }} className="select select-primary w-full max-w-xs ">
+                    <option selected value={appointmentStatus.all}>Status</option>
+                    <option value={appointmentStatus.pending}>Pending</option>
+                    <option value={appointmentStatus.approved}>Approved</option>
+                    <option value={appointmentStatus.canceled}>Canceled</option>
                 </select>
-                <button className="btn btn-primary btn-outline">Upcoming Appointments</button>
-                <button className="btn btn-primary btn-outline">Past Appointments</button>
+                <button className={clsx("btn btn-primary ", filter === 'upcoming' ? "" : 'btn-outline')} onClick={() => {
+                    setFilter((prev) => prev === 'upcoming' ? '' : 'upcoming')
+                }}>Upcoming Appointments</button>
+                <button className={clsx("btn btn-primary ", filter === 'past' ? "" : 'btn-outline')} onClick={() => {
+                    setFilter((prev) => prev === 'past' ? '' : 'past')
+                }} >Past Appointments</button>
                 <label className="input input-bordered input-primary flex items-center gap-2">
-                    <input type="text" className="grow" placeholder="Search by name" />
+                    <input
+
+                        type="text" className="grow placeholder:text-[12px]" placeholder="Search by name and email" onChange={handleSearch} />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -73,7 +115,7 @@ const AppointmentList = () => {
                 </label>
             </div>
         </section>
-        <section className="px-10">
+        <section className="px-10 pb-10">
             <div className="overflow-x-auto bg-white rounded-[1em]">
                 <table className="table">
                     {/* head */}
@@ -89,19 +131,19 @@ const AppointmentList = () => {
                     </thead>
                     <tbody>
 
-                        {currentItems?.map((appointment, i) => <tr key={i}>
+                        {appointments.isLoading ? <td colSpan={'100%'} ><div className="flex justify-center w-full"><span className="loading loading-dots loading-lg"></span></div></td> : currentItems?.length ? currentItems?.map((appointment, i) => <tr key={i}>
                             <td>
                                 <div className="flex items-center gap-3">
                                     <div className="avatar">
                                         <div className="mask mask-squircle h-12 w-12">
                                             <img
-                                                src={appointment.toUser.profilePicture}
+                                                src={appointment.user.profilePicture}
                                                 alt="Avatar Tailwind CSS Component" />
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="font-bold">{appointment.toUser.name}</div>
-                                        <div className="text-sm opacity-50">{appointment.toUser.email}</div>
+                                        <div className="font-bold">{appointment.user.name}</div>
+                                        <div className="text-sm opacity-50">{appointment.user.email}</div>
                                     </div>
                                 </div>
                             </td>
@@ -124,15 +166,19 @@ const AppointmentList = () => {
                             </td>
                             <td>
                                 {appointment.status === appointmentStatus.canceled ? <></> : <div className="flex gap-2">
-                                    <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.approved })} className="btn btn-sm bg-transparent hover:bg-green-50 hover:border-green-200">
+                                    {location.pathname === '/my-appointments' ? <></> : <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.approved })} className="btn btn-sm bg-transparent hover:bg-green-50 hover:border-green-200">
                                         <IoMdCheckboxOutline size={16} className="text-green-600" />
-                                    </button>
+                                    </button>}
                                     <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.canceled })} className="btn btn-sm bg-transparent hover:bg-red-50 hover:border-red-200">
                                         <RiDeleteBinLine size={16} className="text-red-500 " />
                                     </button>
                                 </div>}
                             </td>
-                        </tr>)}
+                        </tr>) : <td colSpan={"100%"}>
+                            <div className="flex justify-center items-center h-5">
+                                <p className="font-semibold">No data found</p>
+                            </div>
+                        </td>}
                     </tbody>
                     {/* foot */}
 
@@ -179,7 +225,9 @@ const AppointmentList = () => {
                 confirmBtnClass={selectedInfo.status === appointmentStatus.canceled ? "btn-error" : ""}
 
                 handleConfirmClick={(ref: Ref<HTMLButtonElement | null>) => {
-                    dispatch(updateAppointmentStatus({ id: selectedInfo.id, data: { status: selectedInfo.status } }))
+                    if (user) {
+                        dispatch(updateAppointmentStatus({ id: selectedInfo.id, data: { status: selectedInfo.status }, uid: user?.id }))
+                    }
                     if (ref) {
                         ref?.current?.click()
                     }

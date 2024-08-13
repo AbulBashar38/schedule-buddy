@@ -68,9 +68,10 @@ export enum appointmentStatus {
   pending = "pending",
   approved = "approved",
   canceled = "canceled",
+  all = "all",
 }
 export interface IAppointments extends IAppointmentModal {
   id: string;
   status: appointmentStatus;
-  toUser: IUserData;
+  user: IUserData;
 }

@@ -37,8 +37,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     searchUser: (state, action: PayloadAction<string>) => {
-      const searchedUsers = state?.allUsers?.filter((user) =>
-        user.name.toLowerCase().includes(action.payload.toLowerCase())
+      const searchedUsers = state?.allUsers?.filter(
+        (user) =>
+          user.name.toLowerCase().includes(action.payload.toLowerCase()) ||
+          user.email.toLowerCase().includes(action.payload.toLowerCase())
       );
       state.searchedUsers = searchedUsers;
     },
