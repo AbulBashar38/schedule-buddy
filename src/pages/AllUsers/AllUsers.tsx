@@ -38,7 +38,7 @@ const AllUsers = () => {
 
     return (
         <main>
-            <section className="flex justify-between items-center py-10 px-10">
+            <section className="flex md:flex-row flex-col justify-between items-center md:py-10 md:px-10 py-5 px-5 gap-2">
                 <h3 className="text-[16px] font-semibold text-primary">User list</h3>
                 <label className="input input-bordered flex items-center gap-2">
                     <input type="text" className="grow placeholder:text-[12px]" placeholder="Search by name and email" onChange={handleSearch} />
