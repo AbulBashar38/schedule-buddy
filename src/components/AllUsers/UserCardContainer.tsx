@@ -12,12 +12,13 @@ const UserCardContainer = ({ userData }: IUserCardContainerProps) => {
         }
     }
     return (
-        <div className="card bg-base-100 w-60 shadow-xl">
+       <div className="w-full h-full flex items-center justify-center">
+         <div className="card bg-base-100 w-60 shadow-xl h-full ">
             <figure className="pt-5">
                 <img
                     src={userData.profilePicture}
                     alt="Shoes"
-                    className="rounded-full w-[6em]" />
+                    className="rounded-full w-[6em] h-[6em] object-cover" />
             </figure>
             <div className="card-body items-center text-center pt-5">
                 <h2 className="card-title">{userData.name}</h2>
@@ -30,6 +31,7 @@ const UserCardContainer = ({ userData }: IUserCardContainerProps) => {
                 <AppointmentModal userId={userData.id} />
             </Modal>
         </div>
+       </div>
     );
 }
 

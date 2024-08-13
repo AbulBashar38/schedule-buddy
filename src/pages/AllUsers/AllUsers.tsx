@@ -40,7 +40,7 @@ const AllUsers = () => {
         <main>
             <section className="flex md:flex-row flex-col justify-between items-center md:py-10 md:px-10 py-5 px-5 gap-2">
                 <h3 className="text-[16px] font-semibold text-primary">User list</h3>
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 w-full max-w-[15em]">
                     <input type="text" className="grow placeholder:text-[12px]" placeholder="Search by name and email" onChange={handleSearch} />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ const AllUsers = () => {
                     </svg>
                 </label>
             </section>
-            <section className='flex flex-row flex-wrap gap-5 items-center justify-center p-5'>
+            <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 items-center justify-center p-5'>
                 {
                     search?.length && allUses?.searchedUsers?.length ? allUses?.searchedUsers?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />) : search?.length && !allUses?.searchedUsers?.length ? <h1 className='text-xl italic '>User not Found</h1> : allUses?.allUsers?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />)
                 }

@@ -23,13 +23,13 @@ const Layout = () => {
     return (
         <main className={"drawer lg:drawer-open"}>
             <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={sidebarOpen} />
-            <section className="drawer-content px-5">
+            <section className="drawer-content lg:px-5">
                 <Navbar setSidebarOpen={setSidebarOpen} />
                 <div className="bg-[#f6f7ff] w-full min-h-[calc(100vh-67px)] rounded-lg">
                     <Outlet />
                 </div>
             </section>
-            <section className="drawer-side">
+            <section className="drawer-side z-[60]">
                 <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" onClick={() => setSidebarOpen(false)
                 }></label>
                 <Sidebar setSidebarOpen={setSidebarOpen} />
