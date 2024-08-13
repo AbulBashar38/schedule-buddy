@@ -32,6 +32,21 @@ const AppointmentList = () => {
         }
 
     }
+
+    const [itemOffset, setItemOffset] = useState(0);
+    const itemsPerPage = 10
+
+    const endOffset = itemOffset + itemsPerPage;
+    const currentItems = appointments?.allAppointments?.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(appointments?.allAppointments?.length / itemsPerPage);
+
+    // Invoke when user click to request another page.
+    const handlePageClick = (event) => {
+        console.log({ event });
+
+        const newOffset = (event.selected * itemsPerPage) % appointments?.allAppointments.length;
+        setItemOffset(newOffset);
+    };
     return (<main>
         <section className="flex justify-between items-center py-10 px-10">
             <h3 className="text-[16px] font-semibold text-primary">Appointment list</h3>
@@ -74,7 +89,7 @@ const AppointmentList = () => {
                     </thead>
                     <tbody>
 
-                        {appointments?.allAppointments?.map((appointment, i) => <tr key={i}>
+                        {currentItems?.map((appointment, i) => <tr key={i}>
                             <td>
                                 <div className="flex items-center gap-3">
                                     <div className="avatar">
@@ -108,14 +123,14 @@ const AppointmentList = () => {
 
                             </td>
                             <td>
-                                <div className="flex gap-2">
-                                    {appointment.status === appointmentStatus.canceled ? <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.approved })} className="btn btn-sm bg-transparent hover:bg-green-50 hover:border-green-200">
+                                {appointment.status === appointmentStatus.canceled ? <></> : <div className="flex gap-2">
+                                    <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.approved })} className="btn btn-sm bg-transparent hover:bg-green-50 hover:border-green-200">
                                         <IoMdCheckboxOutline size={16} className="text-green-600" />
-                                    </button> : <></>}
+                                    </button>
                                     <button onClick={() => handleConfirmationModalOpen({ id: appointment.id, status: appointmentStatus.canceled })} className="btn btn-sm bg-transparent hover:bg-red-50 hover:border-red-200">
                                         <RiDeleteBinLine size={16} className="text-red-500 " />
                                     </button>
-                                </div>
+                                </div>}
                             </td>
                         </tr>)}
                     </tbody>
@@ -134,10 +149,11 @@ const AppointmentList = () => {
                         previousLabel="<"
                         nextLabel=">"
                         breakLabel="..."
-                        pageCount={15}
-                        pageRangeDisplayed={3}
-                        marginPagesDisplayed={3}
-                        onPageChange={() => { }}
+                        pageCount={pageCount}
+
+                        pageRangeDisplayed={1}
+                        marginPagesDisplayed={1}
+                        onPageChange={handlePageClick}
                         renderOnZeroPageCount={null}
                     // forcePage={forcePage}
                     />
