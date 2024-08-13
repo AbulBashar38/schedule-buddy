@@ -23,6 +23,7 @@ or
 yarn
 ```
 Create a `.env` file in your project `root directory`.
+![env_image](./src/assets/images/env.png)
 
 Paste this `credential` in your `.env` file
 
