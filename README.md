@@ -1,50 +1,56 @@
-# React + TypeScript + Vite
+# Schedule Buddy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a great appointment scheduler application built using React. Here's a breakdown of the functionalities and specifications for running the project locally.
 
-Currently, two official plugins are available:
+### 1. Live Demo
+Demo: [https://schedule-buddy-app.web.app](https://schedule-buddy-app.web.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 2. Run it locally
+Clone the repository into your projects directory:
 ```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+git clone https://github.com/AbulBashar38/schedule-buddy.git
 ```
+Or
+```
+git clone git@github.com:AbulBashar38/schedule-buddy.git
+```
+Install Dependency
+```
+npm i
+```
+or 
+```
+yarn
+```
+Create a `.env` file in your project `root directory`.
+
+Paste this `credential` in your `.env` file
+
+```.env
+VITE_FIREBASE_API_KEY=AIzaSyCXK9h_wnhNHvnaTZ3FREI4BDDOICPfr6g
+VITE_FIREBASE_AUTH_DOMAIN=schedule-buddy-app.firebaseapp.com
+VITE_FIREBASE_DATABASE_URL=https://your-dev-app.firebaseio.com
+VITE_FIREBASE_PROJECT_ID=schedule-buddy-app
+VITE_FIREBASE_STORAGE_BUCKET=schedule-buddy-app.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=505046968992
+VITE_FIREBASE_APP_ID=1:505046968992:web:1582654123e27ee9dd37c5Ï
+
+```
+Build your project to run in production mode
+```
+npm run build
+```
+Or
+```
+yarn build
+```
+Finally run your project:
+```
+npm run preview
+```
+Or
+```
+yarn preview
+```
+Now you can browse the project at [http://localhost:4173/](http://localhost:4173/)
+
