@@ -4,6 +4,7 @@ import { Navigate, Outlet } from "react-router";
 
 const AuthPageChecker = () => {
     const { authStatus } = useContext(AuthContext)
+    console.log(authStatus)
     return (authStatus === 'unauthenticated' ? <>
         <Outlet />
     </> : <Navigate to={'/'} />);

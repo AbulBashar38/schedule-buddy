@@ -1,7 +1,7 @@
-import { ReactNode, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../Auth/AuthProvider";
 import Layout from "./Layout";
-import { Navigate, Outlet } from "react-router";
+import { Navigate } from "react-router";
 
 const PrivateRoute = () => {
     const { authStatus } = useContext(AuthContext)

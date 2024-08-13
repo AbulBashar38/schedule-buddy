@@ -1,6 +1,7 @@
 import { AiOutlineUser } from "react-icons/ai";
 import { INavItem } from "./interface";
 import { CiBoxList } from "react-icons/ci";
+import { LiaClipboardListSolid } from "react-icons/lia";
 
 export const navItems: INavItem[] = [
     {
@@ -9,9 +10,14 @@ export const navItems: INavItem[] = [
         path: '/all-users'
     },
     {
-        name: 'Appointment List',
+        name: 'My Appointments',
         Icon: CiBoxList,
-        path: '/appointment-list'
+        path: '/my-appointments'
+    },
+    {
+        name: 'Requested Appointments',
+        Icon: LiaClipboardListSolid,
+        path: '/requested-appointments'
     },
 
 ];

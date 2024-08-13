@@ -1,9 +1,10 @@
 import { createBrowserRouter, LoaderFunctionArgs, redirect } from "react-router-dom";
-import Layout from "../components/Layout";
+
 import AllUsers from "../pages/AllUsers/AllUsers";
 import AuthPage from "../Auth/AuthPage";
 import PrivateRoute from "../components/PrivateRoute";
 import AuthPageChecker from "../components/AuthPageChecker";
+import AppointmentList from "../pages/AppointmentList/AppointmentList";
 
 export const router = createBrowserRouter([
     {
@@ -25,8 +26,12 @@ export const router = createBrowserRouter([
                 element: <AllUsers />
             },
             {
-                path: '/appointment-list',
-                element: <AllUsers />
+                path: '/my-appointments',
+                element: <AppointmentList />
+            },
+            {
+                path: '/requested-appointments',
+                element: <AppointmentList />
             }
         ]
 

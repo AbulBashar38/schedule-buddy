@@ -41,7 +41,7 @@ const AllUsers = () => {
             <section className="flex justify-between items-center py-10 px-10">
                 <h3 className="text-[16px] font-semibold text-primary">User list</h3>
                 <label className="input input-bordered flex items-center gap-2">
-                    <input type="text" className="grow" placeholder="Search by name" onChange={handleSearch} />
+                    <input type="text" className="grow placeholder:text-[12px]" placeholder="Search by name and email" onChange={handleSearch} />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -56,7 +56,7 @@ const AllUsers = () => {
             </section>
             <section className='flex flex-row flex-wrap gap-5 items-center justify-center p-5'>
                 {
-                    search?.length ? allUses?.searchedUsers?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />) : allUses?.allUsers?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />)
+                    search?.length && allUses?.searchedUsers?.length ? allUses?.searchedUsers?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />) : search?.length && !allUses?.searchedUsers?.length ? <h1 className='text-xl italic '>User not Found</h1> : allUses?.allUsers?.map((info: IUserData, i: number) => <UserCardContainer userData={info} key={i} />)
                 }
             </section>
         </main>
